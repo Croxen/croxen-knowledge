@@ -1,18 +1,17 @@
-// Serverless API: deploy the current dev build to production.
+// Serverless API: deploy the current dev design to production.
 // Vercel auto-detects api/*.js as serverless functions.
 //
 // POST /api/deploy-design  — requires X-Approve-Secret header
-//   Deploys the connected GitHub repo (main branch) to Vercel
-//   production, making the current dev design live.
+//   Triggers the GitHub Actions "deploy.yml" workflow (workflow_dispatch),
+//   which builds and deploys the current main branch to Vercel production.
+//   This makes the current dev design live on the public site.
 //
 // This is the "Approve design" button in the top-right of the dev site.
 // It pushes whatever is on dev (templates, CSS, copy) to prod — it does
 // NOT touch article approval (that's the per-article Approve button).
 
-const VERCEL_TOKEN = process.env.VERCEL_TOKEN;
-const VERCEL_PROJECT = process.env.VERCEL_PROJECT || "croxen-knowledge";
+const GH_TOKEN = process.env.GH_TOKEN;
 const GH_REPO = process.env.GH_REPO || "Croxen/croxen-knowledge";
-const GH_REPO_ID = process.env.VERCEL_REPO_ID || "1298092585";
 const APPROVE_SECRET = process.env.APPROVE_SECRET;
 
 export default async function handler(req, res) {
@@ -22,31 +21,31 @@ export default async function handler(req, res) {
   if (APPROVE_SECRET && req.headers["x-approve-secret"] !== APPROVE_SECRET) {
     return res.status(403).json({ error: "Unauthorized" });
   }
-  if (!VERCEL_TOKEN) {
-    return res.status(500).json({ error: "VERCEL_TOKEN not configured" });
+  if (!GH_TOKEN) {
+    return res.status(500).json({ error: "GH_TOKEN not configured" });
   }
 
   try {
-    const resp = await fetch("https://api.vercel.com/v13/deployments", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${VERCEL_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: VERCEL_PROJECT,
-        target: "production",
-        gitSource: { type: "github", repo: GH_REPO, repoId: GH_REPO_ID, ref: "main" },
-      }),
-    });
+    // Trigger the GitHub Actions workflow that does the real Vercel deploy.
+    const resp = await fetch(
+      `https://api.github.com/repos/${GH_REPO}/actions/workflows/deploy.yml/dispatches`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${GH_TOKEN}`,
+          Accept: "application/vnd.github+json",
+          "Content-Type": "application/json",
+          "User-Agent": "croxen-labs",
+        },
+        body: JSON.stringify({ ref: "main" }),
+      }
+    );
     if (!resp.ok) {
       const text = await resp.text();
-      return res.status(resp.status).json({ error: `Deploy failed: ${text}` });
+      return res.status(resp.status).json({ error: `Workflow trigger failed: ${text}` });
     }
-    const data = await resp.json();
     return res.status(200).json({
-      message: "Design deployed to production. Live in ~30 seconds.",
-      url: data.url,
+      message: "Production deploy started. Live in ~30–60 seconds.",
     });
   } catch (err) {
     return res.status(500).json({ error: err.message });
