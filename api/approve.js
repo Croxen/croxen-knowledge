@@ -11,6 +11,8 @@
 const GH_TOKEN = process.env.GH_TOKEN;
 const GH_REPO = process.env.GH_REPO || "Croxen/croxen-knowledge";
 const APPROVE_SECRET = process.env.APPROVE_SECRET;
+const VERCEL_TOKEN = process.env.VERCEL_TOKEN;
+const VERCEL_PROJECT = process.env.VERCEL_PROJECT || "croxen-knowledge";
 
 const VALID_SECTIONS = ["learning", "experiments", "guides"];
 
@@ -77,6 +79,32 @@ async function deleteFile(apiUrl, sha, message) {
   return { ok: true };
 }
 
+async function triggerDevRedeploy() {
+  if (!VERCEL_TOKEN) return { ok: false, skipped: true };
+  try {
+    const resp = await fetch(`https://api.vercel.com/v13/deployments`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${VERCEL_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: VERCEL_PROJECT,
+        target: "preview",
+        gitSource: { repo: GH_REPO, ref: "main" },
+        build: { env: { DEV_MODE: "1" } },
+      }),
+    });
+    if (!resp.ok) {
+      return { ok: false, status: resp.status, text: await resp.text() };
+    }
+    const data = await resp.json();
+    return { ok: true, url: data.url };
+  } catch (err) {
+    return { ok: false, text: err.message };
+  }
+}
+
 export default async function handler(req, res) {
   // GET /api/content?slug=...&section=... — fetch raw Markdown
   if (req.method === "GET") {
@@ -135,13 +163,26 @@ export default async function handler(req, res) {
     }
     const commit = await commitFile(apiUrl, content, sha, `Edit: ${section}/${slug}`);
     if (!commit.ok) return res.status(commit.status).json({ error: `Commit failed: ${commit.text}` });
-    return res.status(200).json({ message: "Article saved. Dev preview will update shortly.", slug, section, commit: commit.data.commit?.sha || "" });
+    // Trigger a dev preview redeploy so the changes show up
+    const redeploy = await triggerDevRedeploy();
+    return res.status(200).json({
+      message: "Article saved. Dev preview rebuilding — refresh in ~30 seconds.",
+      slug, section,
+      commit: commit.data.commit?.sha || "",
+      redeploy: redeploy.ok ? "triggered" : "skipped",
+    });
   }
 
   if (action === "delete") {
     const del = await deleteFile(apiUrl, sha, `Delete: ${section}/${slug}`);
     if (!del.ok) return res.status(del.status).json({ error: `Delete failed: ${del.text}` });
-    return res.status(200).json({ message: "Article deleted.", slug, section });
+    // Trigger a dev preview redeploy
+    const redeploy = await triggerDevRedeploy();
+    return res.status(200).json({
+      message: "Article deleted. Dev preview rebuilding.",
+      slug, section,
+      redeploy: redeploy.ok ? "triggered" : "skipped",
+    });
   }
 
   return res.status(400).json({ error: `Unknown action: ${action}` });
