@@ -10,7 +10,7 @@ id_rsa
 *secrets*
 
 # Build output
-_build/
+public/
 __pycache__/
 *.pyc
 

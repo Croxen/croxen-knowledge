@@ -37,7 +37,7 @@ REPO_ROOT = Path(__file__).resolve().parent
 CONTENT_DIR = REPO_ROOT / "content"
 TEMPLATES_DIR = REPO_ROOT / "templates"
 STATIC_DIR = REPO_ROOT / "static"
-BUILD_DIR = REPO_ROOT / "_build"
+BUILD_DIR = REPO_ROOT / "public"
 SITE_URL = "https://croxen-knowledge.vercel.app"
 SITE_PATH = ""  # Vercel serves from root — no subpath needed
 DEV_MODE = os.environ.get("DEV_MODE", "") == "1"
@@ -273,12 +273,6 @@ def write_build(generated: list[dict]) -> None:
     # Copy static files
     if STATIC_DIR.exists():
         shutil.copytree(STATIC_DIR, BUILD_DIR / "static")
-
-    # Copy API functions into the build output so Vercel deploys them
-    # as serverless functions alongside the static content
-    api_dir = REPO_ROOT / "api"
-    if api_dir.exists():
-        shutil.copytree(api_dir, BUILD_DIR / "api")
 
     for page in generated:
         out_path = BUILD_DIR / page["path"]
