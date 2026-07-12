@@ -24,8 +24,8 @@ leaving my network.
 - **Terminal access**: It can run commands, check system status, and
   automate repetitive tasks.
 - **Cost control**: I use OpenRouter to route to cheaper models for simple
-  tasks and better models for complex ones. Total cost so far: about $100
-  over a month of daily use.
+  tasks and better models for complex ones. 
+ 
 
 ## What doesn't work
 
@@ -43,8 +43,8 @@ How quickly it became normal. After a week, I stopped thinking about it as
 a terminal or a text editor. The novelty wore off, and what remained was
 useful.
 
-## Would I recommend it?
+## Let the Ai work for you
 
-If you're comfortable with Linux, have a spare machine or VM, and want
-more control over your AI workflow — yes. If you just want quick answers
-to questions, a cloud service is simpler and probably cheaper.
+My set up has been built with AI, I told it what to do, gave it examples and worked with it to build the connections.
+
+
