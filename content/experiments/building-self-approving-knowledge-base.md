@@ -1,8 +1,8 @@
 ---
 title: "Building a Self-Approving Knowledge Base"
 date: 2026-07-12
-status: draft
-visibility: draft
+status: approved
+visibility: approved
 tags: [workflow, automation, knowledge-base]
 summary: "How I set up a dev-to-prod publishing pipeline with an approve button directly on the preview site."
 ---
