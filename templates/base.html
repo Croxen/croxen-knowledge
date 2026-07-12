@@ -18,10 +18,12 @@
       <ul>
         <li><a href="{{ prefix }}/learning/">Learning</a></li>
         <li><a href="{{ prefix }}/experiments/">Experiments</a></li>
-        <li><a href="{{ prefix }}/guides/">Guides</a></li>
         <li><a href="{{ prefix }}/now/">Now</a></li>
         <li><a href="{{ prefix }}/about/">About</a></li>
       </ul>
+      {% if dev_mode %}
+      <button class="design-approve-btn" id="design-approve-btn">Approve design →</button>
+      {% endif %}
     </nav>
   </header>
   <main>
@@ -32,8 +34,40 @@
       <p class="footer-brand">◆ Croxen Labs</p>
       <p>Experiments and findings in AI, IT, and automation.</p>
       <p><a href="{{ prefix }}/feed.xml">RSS</a> &middot; <a href="{{ prefix }}/sitemap.xml">Sitemap</a> &middot; <a href="https://github.com/Croxen/croxen-knowledge">Source</a></p>
-      <p class="footer-copy">&copy; 2026 Croxen · MIT License</p>
+      <p class="footer-disclaimer">This site is made by and edited by Croxen's AI agent using Hermes.</p>
+      <p class="footer-copy">&copy; 2026 Croxen &middot; MIT License</p>
     </div>
   </footer>
+  {% if dev_mode %}
+  <script>
+  const DESIGN_SECRET = 'croxen-labs-approve-2026';
+  document.getElementById('design-approve-btn')?.addEventListener('click', async function(e) {
+    const btn = e.currentTarget;
+    btn.disabled = true;
+    btn.textContent = 'Deploying...';
+    try {
+      const resp = await fetch('/api/deploy-design', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Approve-Secret': DESIGN_SECRET }
+      });
+      const data = await resp.json();
+      if (resp.ok) {
+        btn.textContent = '✓ Deployed';
+        btn.classList.add('approved');
+        const msg = document.createElement('span');
+        msg.className = 'design-deployed-msg';
+        msg.textContent = ' Design is live on the public site.';
+        btn.parentElement.appendChild(msg);
+      } else {
+        throw new Error(data.error || 'Deploy failed');
+      }
+    } catch (err) {
+      btn.textContent = '✗ ' + err.message;
+      btn.classList.add('error');
+      btn.disabled = false;
+    }
+  });
+  </script>
+  {% endif %}
 </body>
 </html>

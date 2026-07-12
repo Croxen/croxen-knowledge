@@ -1,8 +1,14 @@
 name: Deploy to Vercel
 
+# NOTE: Production deploys are NO LONGER automatic on push.
+# The dev site's "Approve" (article) and "Approve design" buttons call
+# the Vercel API directly to push changes to production. This keeps prod
+# changes under explicit human approval.
+#
+# Manual deploy (if ever needed):
+#   gh workflow run deploy.yml --repo Croxen/croxen-knowledge
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy-prod:

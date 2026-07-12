@@ -51,7 +51,10 @@ async function commitFile(apiUrl, content, sha, message) {
       "Content-Type": "application/json",
       "User-Agent": "croxen-labs",
     },
-    body: JSON.stringify({ message, content: encoded, sha, branch: "main" }),
+    body: JSON.stringify({
+      message, content: encoded, sha, branch: "main",
+      author: { name: "Croxen", email: "Croxen@users.noreply.github.com" },
+    }),
   });
   if (!resp.ok) {
     const text = await resp.text();
@@ -70,7 +73,7 @@ async function deleteFile(apiUrl, sha, message) {
       "Content-Type": "application/json",
       "User-Agent": "croxen-labs",
     },
-    body: JSON.stringify({ message, sha, branch: "main" }),
+    body: JSON.stringify({ message, sha, branch: "main", author: { name: "Croxen", email: "Croxen@users.noreply.github.com" } }),
   });
   if (!resp.ok) {
     const text = await resp.text();

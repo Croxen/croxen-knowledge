@@ -46,7 +46,6 @@ DEV_MODE = os.environ.get("DEV_MODE", "") == "1"
 SECTIONS = {
     "learning": "Learning",
     "experiments": "Experiments",
-    "guides": "Guides",
 }
 
 # Standalone pages (single page, no article list)
