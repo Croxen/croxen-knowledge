@@ -39,16 +39,21 @@ def run(cmd, env=None):
 def build():
     """Build the static site."""
     print("=== Building site ===")
-    code, out, err = run(["python3", "build.py"])
-    print(out)
-    if code != 0:
-        print(f"Build failed: {err}", file=sys.stderr)
+    # In dev mode, set DEV_MODE=1 so draft articles are included
+    env = {**os.environ}
+    if os.environ.get("DEPLOY_MODE") == "dev":
+        env["DEV_MODE"] = "1"
+    r = subprocess.run(["python3", "build.py"], capture_output=True, text=True, env=env, cwd=REPO)
+    print(r.stdout)
+    if r.returncode != 0:
+        print(f"Build failed: {r.stderr}", file=sys.stderr)
         sys.exit(1)
     print("✓ Build complete\n")
 
 
 def deploy_dev():
     """Deploy to Vercel preview and alias to stable dev URL."""
+    os.environ["DEPLOY_MODE"] = "dev"
     build()
 
     print("=== Deploying to preview ===")
@@ -100,6 +105,7 @@ def deploy_dev():
 
 def deploy_prod():
     """Deploy to Vercel production."""
+    os.environ["DEPLOY_MODE"] = "prod"
     build()
 
     print("=== Deploying to production ===")
