@@ -1,10 +1,6 @@
 {
+  "buildCommand": "pip install jinja2 markdown && python3 build.py",
   "outputDirectory": "_build",
   "cleanUrls": true,
-  "trailingSlash": true,
-  "functions": {
-    "api/approve.py": {
-      "runtime": "@vercel/python@5.7.0"
-    }
-  }
+  "trailingSlash": true
 }
