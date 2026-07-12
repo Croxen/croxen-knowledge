@@ -274,6 +274,11 @@ def write_build(generated: list[dict]) -> None:
     if STATIC_DIR.exists():
         shutil.copytree(STATIC_DIR, BUILD_DIR / "static")
 
+    # Copy API functions (serverless endpoints)
+    api_dir = REPO_ROOT / "api"
+    if api_dir.exists():
+        shutil.copytree(api_dir, BUILD_DIR / "api")
+
     for page in generated:
         out_path = BUILD_DIR / page["path"]
         out_path.parent.mkdir(parents=True, exist_ok=True)
