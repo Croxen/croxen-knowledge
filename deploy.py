@@ -52,13 +52,12 @@ def build():
 
 
 def deploy_dev():
-    """Deploy to Vercel preview and alias to stable dev URL.
+    """Deploy to Vercel preview and alias to stable dev URL."""
+    os.environ["DEPLOY_MODE"] = "dev"
+    build()
 
-    We don't build locally — Vercel builds with DEV_MODE=1 set as an env var
-    so the build includes draft articles and the approve API function.
-    """
-    print("=== Deploying to preview (Vercel builds with DEV_MODE=1) ===")
-    code, out, err = run(["vercel", "--yes", "--build-env", "DEV_MODE=1"])
+    print("=== Deploying to preview ===")
+    code, out, err = run(["vercel", "--yes"])
     print(out)
     if code != 0:
         print(f"Deploy failed: {err}", file=sys.stderr)

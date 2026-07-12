@@ -274,8 +274,10 @@ def write_build(generated: list[dict]) -> None:
     if STATIC_DIR.exists():
         shutil.copytree(STATIC_DIR, BUILD_DIR / "static")
 
-    # Note: api/ directory is NOT copied — Vercel picks it up from the
-    # project root via the "functions" config in vercel.json.
+    # Copy API functions into the build output so Vercel deploys them
+    api_dir = REPO_ROOT / "api"
+    if api_dir.exists():
+        shutil.copytree(api_dir, BUILD_DIR / "api")
 
     for page in generated:
         out_path = BUILD_DIR / page["path"]
