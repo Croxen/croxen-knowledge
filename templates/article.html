@@ -62,7 +62,15 @@
 </nav>
 
 {% if article.is_draft or (dev_mode and article.is_approved) %}
+{% if dev_mode %}
 <script>
+// Runtime guard: never run dev controls on a prod host (even if served from a
+// dev build). Hides edit/delete and the LIVE badge, and skips wiring handlers.
+if (window.croxenIsProdHost && window.croxenIsProdHost()) {
+  document.querySelectorAll('.draft-banner, .edit-panel').forEach(function (el) {
+    el.style.display = 'none';
+  });
+} else {
 const SECRET = 'croxen-labs-approve-2026';
 const slug = '{{ article.slug }}';
 const section = '{{ article.section }}';
@@ -207,6 +215,8 @@ document.getElementById('delete-btn')?.addEventListener('click', async function(
     btn.disabled = false;
   }
 });
+}
 </script>
+{% endif %}
 {% endif %}
 {% endblock %}

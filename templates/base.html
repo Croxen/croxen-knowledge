@@ -7,6 +7,21 @@
   <meta name="description" content="{% block description %}Experiments, research, and practical findings in AI, IT, automation, and personal technology.{% endblock %}">
   <link rel="stylesheet" href="{{ prefix }}/static/style.css">
   <link rel="alternate" type="application/rss+xml" title="Croxen Labs" href="{{ prefix }}/feed.xml">
+  <script>
+    // Dev-only controls (Approve design, edit/delete) are gated to non-prod hosts
+    // at RUNTIME as a belt-and-suspenders guard, so they can never render on the
+    // public site even if a dev build (DEV_MODE=1) is ever served from a prod alias.
+    window.CROXEN_PROD_HOSTS = [
+      "croxen-knowledge-public.vercel.app",
+      "croxen-knowledge.vercel.app",
+      "croxen-knowledge-croxen.vercel.app",
+      "croxen-knowledge-public-amrroden-9550-croxen.vercel.app",
+      "croxen-knowledge-amrroden-9550-croxen.vercel.app"
+    ];
+    window.croxenIsProdHost = function () {
+      return window.CROXEN_PROD_HOSTS.indexOf(location.hostname) !== -1;
+    };
+  </script>
 </head>
 <body>
   <header>
@@ -22,7 +37,7 @@
         <li><a href="{{ prefix }}/about/">About</a></li>
       </ul>
       {% if dev_mode %}
-      <button class="design-approve-btn" id="design-approve-btn">Approve design →</button>
+      <button class="design-approve-btn" id="design-approve-btn" hidden>Approve design →</button>
       {% endif %}
     </nav>
   </header>
@@ -40,6 +55,11 @@
   </footer>
   {% if dev_mode %}
   <script>
+  // Only reveal the design-approve control on non-prod hosts (runtime guard).
+  if (!window.croxenIsProdHost()) {
+    const btn = document.getElementById('design-approve-btn');
+    if (btn) btn.hidden = false;
+  }
   const DESIGN_SECRET = 'croxen-labs-approve-2026';
   document.getElementById('design-approve-btn')?.addEventListener('click', async function(e) {
     const btn = e.currentTarget;
