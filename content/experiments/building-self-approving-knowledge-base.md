@@ -1,14 +1,14 @@
 ---
 title: "Building a Self-Approving Knowledge Base"
 date: 2026-07-12
-status: draft
-visibility: draft
+status: approved
+visibility: approved
 tags: [workflow, automation, knowledge-base]
 summary: "How I set up a dev-to-prod publishing pipeline with an approve button directly on the preview site."
 ---
 
 This is a test of the approve workflow. When you press the green button
-above, this article's status gets flipped from `draft` to `approved` on
+above, this article's status gets flipped from `draft` `edit` to `approved` on
 GitHub, which triggers a production rebuild on Vercel.
 
 ## How it works
