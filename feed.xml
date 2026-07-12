@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Croxen Knowledge</title>
+    <link>https://croxen.github.io/croxen-knowledge</link>
+    <description>A public knowledge base about AI, IT, automation, and personal technology.</description>
+    <lastBuildDate>Sun, 12 Jul 2026 08:08:33 +0000</lastBuildDate>
+    <item>
+      <title>Testing Static Site Generators for a Personal Knowledge Base</title>
+      <link>https://croxen.github.io/croxen-knowledge/croxen-knowledge/experiments/testing-static-site-generators/</link>
+      <guid>https://croxen.github.io/croxen-knowledge/croxen-knowledge/experiments/testing-static-site-generators/</guid>
+      <pubDate>2026-07-12</pubDate>
+    </item>
+  </channel>
+</rss>

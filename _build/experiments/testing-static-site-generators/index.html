@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Testing Static Site Generators for a Personal Knowledge Base — Croxen Knowledge</title>
+  <meta name="description" content="A public knowledge base about AI, IT, automation, and personal technology.">
+  <link rel="stylesheet" href="/croxen-knowledge/static/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Croxen Knowledge" href="/croxen-knowledge/feed.xml">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/croxen-knowledge/" class="brand">Croxen Knowledge</a>
+      <ul>
+        <li><a href="/croxen-knowledge/learning/">Learning</a></li>
+        <li><a href="/croxen-knowledge/experiments/">Experiments</a></li>
+        <li><a href="/croxen-knowledge/guides/">Guides</a></li>
+        <li><a href="/croxen-knowledge/now/">Now</a></li>
+        <li><a href="/croxen-knowledge/about/">About</a></li>
+        <li><a href="/croxen-knowledge/changelog/">Changelog</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    
+<article>
+  <h1>Testing Static Site Generators for a Personal Knowledge Base</h1>
+  <time datetime="2026-07-12">2026-07-12</time>
+  
+  <p class="tags">static-site, knowledge-base, experiments</p>
+  
+  &lt;h1&gt;Testing Static Site Generators&lt;/h1&gt;
+&lt;p&gt;I tested a few static site generators for my AI knowledge base. Hugo was
+fast but added complexity I did not need. Jekyll required a Ruby
+dependency I did not want to install. I chose a simpler approach using
+Python and Jinja2 because reducing dependencies made the system easier to
+understand and maintain.&lt;/p&gt;
+&lt;h2&gt;What I tried&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Hugo&lt;/strong&gt;: fast, but the template language was overkill for a small site.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Jekyll&lt;/strong&gt;: solid, but I did not want to install Ruby just to build a site.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;A custom Python script&lt;/strong&gt;: about 200 lines, easy to read, does exactly
+  what I need.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;What I learned&lt;/h2&gt;
+&lt;p&gt;The simplest tool that solves the problem is usually the best choice for a
+small project. Fewer dependencies mean fewer things to break, and the whole
+system stays auditable — you can read every line of the build script and
+understand what it does.&lt;/p&gt;
+&lt;h2&gt;Why this matters&lt;/h2&gt;
+&lt;p&gt;A knowledge base is a long-term project. If the build tool is something
+you don&#39;t understand, fixing it when it breaks becomes a project of its
+own. A 200-line Python script using libraries that have been stable for
+years is something I can maintain myself, without waiting for a framework
+update or debugging a template language I barely use.&lt;/p&gt;
+</article>
+<nav class="article-nav">
+  <a href="/croxen-knowledge/experiments/">← Back to Experiments</a>
+</nav>
+
+  </main>
+  <footer>
+    <p>&copy; 2026 Croxen. Content under <a href="https://github.com/Croxen/croxen-knowledge/blob/main/LICENSE">MIT License</a>.</p>
+    <p><a href="/croxen-knowledge/feed.xml">RSS</a> &middot; <a href="/croxen-knowledge/sitemap.xml">Sitemap</a></p>
+  </footer>
+</body>
+</html>
