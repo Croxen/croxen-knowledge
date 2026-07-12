@@ -5,7 +5,7 @@
   "trailingSlash": true,
   "functions": {
     "api/approve.py": {
-      "runtime": "@vercel/python"
+      "runtime": "@vercel/python@5.7.0"
     }
   }
 }
