@@ -3,6 +3,15 @@
 {% block content %}
 <article class="article">
   <header class="article-header">
+    {% if article.is_draft %}
+    <div class="draft-banner">
+      <span class="draft-badge">DRAFT</span>
+      <span class="draft-text">This is a preview. Not yet published.</span>
+      <button class="approve-btn" data-slug="{{ article.slug }}" data-section="{{ article.section }}">
+        Approve for production →
+      </button>
+    </div>
+    {% endif %}
     <h1>{{ article.title }}</h1>
     <div class="article-meta">
       <time datetime="{{ article.date }}">{{ article.date }}</time>
@@ -19,4 +28,47 @@
 <nav class="article-nav">
   <a href="{{ prefix }}/{{ section }}/">← Back to {{ section_title }}</a>
 </nav>
+
+{% if article.is_draft %}
+<script>
+document.querySelector('.approve-btn')?.addEventListener('click', async function(e) {
+  const btn = e.target;
+  const slug = btn.dataset.slug;
+  const section = btn.dataset.section;
+  btn.disabled = true;
+  btn.textContent = 'Approving...';
+
+  try {
+    const resp = await fetch('/api/approve', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Approve-Secret': 'croxen-labs-approve-2026',
+      },
+      body: JSON.stringify({ slug, section })
+    });
+    const data = await resp.json();
+
+    if (resp.ok) {
+      btn.textContent = '✓ Approved! Production deploy triggered';
+      btn.classList.add('approved');
+      btn.disabled = true;
+
+      // Show a message about what happens next
+      const msg = document.createElement('p');
+      msg.className = 'approve-success-msg';
+      // Safe: msg is a hardcoded string, no user input interpolated
+      msg.innerHTML = 'This article is now approved. The production site will update in about 30 seconds. Refresh to see it live on <a href="https://croxen-knowledge-public.vercel.app/{{ section }}/{{ slug }}/">the production site</a>.';
+      btn.parentElement.appendChild(msg);
+    } else {
+      throw new Error(data.error || 'Approval failed');
+    }
+  } catch (err) {
+    btn.textContent = '✗ ' + err.message;
+    btn.classList.add('error');
+    btn.disabled = false;
+  }
+});
+</script>
+{% endif %}
 {% endblock %}

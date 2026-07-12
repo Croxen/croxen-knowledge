@@ -40,6 +40,7 @@ STATIC_DIR = REPO_ROOT / "static"
 BUILD_DIR = REPO_ROOT / "_build"
 SITE_URL = "https://croxen-knowledge.vercel.app"
 SITE_PATH = ""  # Vercel serves from root — no subpath needed
+DEV_MODE = os.environ.get("DEV_MODE", "") == "1"
 
 # Sections that contain articles (each gets an index + individual pages)
 SECTIONS = {
@@ -102,10 +103,15 @@ def load_articles() -> dict[str, list[dict]]:
             meta, body = parse_front_matter(text)
             if not meta.get("title"):
                 continue
-            # Skip drafts and non-approved
+            # Skip non-approved articles unless in dev mode
             status = str(meta.get("status", "")).lower()
             if status != "approved":
-                continue
+                if not DEV_MODE:
+                    continue
+                # In dev mode, include drafts but mark them
+                meta["is_draft"] = True
+            else:
+                meta["is_draft"] = False
 
             html_body = markdown.markdown(body, extensions=["extra", "codehilite"])
             slug = md_file.stem
@@ -118,6 +124,7 @@ def load_articles() -> dict[str, list[dict]]:
                 "url": f"{SITE_PATH}/{section}/{slug}/",
                 "slug": slug,
                 "section": section,
+                "is_draft": meta.get("is_draft", False),
             }
             articles[section].append(article)
 
@@ -293,6 +300,7 @@ def main():
         autoescape=select_autoescape(["html", "xml"]),
     )
     env.globals["prefix"] = SITE_PATH
+    env.globals["dev_mode"] = DEV_MODE
 
     articles = load_articles()
     generated = render_templates(articles, env)

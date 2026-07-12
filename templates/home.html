@@ -19,6 +19,9 @@
   <div class="article-grid">
     {% for a in articles %}
     <a href="{{ a.url }}" class="article-card">
+      {% if a.is_draft %}
+      <span class="draft-badge">DRAFT</span>
+      {% endif %}
       <time datetime="{{ a.date }}">{{ a.date }}</time>
       <h3>{{ a.title }}</h3>
       {% if a.summary %}

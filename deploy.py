@@ -52,7 +52,7 @@ def deploy_dev():
     build()
 
     print("=== Deploying to preview ===")
-    code, out, err = run(["vercel", "--yes"])
+    code, out, err = run(["vercel", "--yes", "--env", "DEV_MODE=1"])
     print(out)
     if code != 0:
         print(f"Deploy failed: {err}", file=sys.stderr)

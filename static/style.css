@@ -412,6 +412,81 @@ ul.changelog time {
   font-size: 0.9rem;
 }
 
+/* --- Draft Banner & Approve Button --- */
+.draft-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.draft-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  background: #f59e0b;
+  color: #fff !important;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: 6px;
+}
+
+.draft-text {
+  font-size: 0.875rem;
+  color: var(--fg-muted);
+}
+
+.approve-btn {
+  margin-left: auto;
+  padding: 0.55rem 1.2rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+  font-family: inherit;
+}
+
+.approve-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.approve-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.approve-btn.approved {
+  background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+}
+
+.approve-btn.error {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.approve-success-msg {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.875rem;
+  color: var(--fg-muted);
+  width: 100%;
+}
+
+.approve-success-msg a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
 /* --- Empty State --- */
 .empty-state {
   color: var(--fg-muted);
