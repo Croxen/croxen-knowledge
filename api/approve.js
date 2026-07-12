@@ -105,6 +105,31 @@ async function triggerDevRedeploy() {
   }
 }
 
+async function triggerProdRedeploy() {
+  if (!VERCEL_TOKEN) return { ok: false, skipped: true };
+  try {
+    const resp = await fetch(`https://api.vercel.com/v13/deployments`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${VERCEL_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: VERCEL_PROJECT,
+        target: "production",
+        gitSource: { repo: GH_REPO, ref: "main" },
+      }),
+    });
+    if (!resp.ok) {
+      return { ok: false, status: resp.status, text: await resp.text() };
+    }
+    const data = await resp.json();
+    return { ok: true, url: data.url };
+  } catch (err) {
+    return { ok: false, text: err.message };
+  }
+}
+
 export default async function handler(req, res) {
   // GET /api/content?slug=...&section=... — fetch raw Markdown
   if (req.method === "GET") {
@@ -154,7 +179,14 @@ export default async function handler(req, res) {
     }
     const commit = await commitFile(apiUrl, body, sha, `Approve: ${section}/${slug}`);
     if (!commit.ok) return res.status(commit.status).json({ error: `Commit failed: ${commit.text}` });
-    return res.status(200).json({ message: "Approved! Production deploy triggered.", slug, section, commit: commit.data.commit?.sha || "" });
+    // Trigger a production redeploy so the article goes live
+    const redeploy = await triggerProdRedeploy();
+    return res.status(200).json({
+      message: "Approved! Production deploy triggered.",
+      slug, section,
+      commit: commit.data.commit?.sha || "",
+      redeploy: redeploy.ok ? "triggered" : "skipped",
+    });
   }
 
   if (action === "edit") {
