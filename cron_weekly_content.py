@@ -21,7 +21,7 @@ from pathlib import Path
 
 REPO = Path(os.environ.get("CROXEN_REPO", str(Path.home() / "croxen-knowledge-public")))
 SECRET = os.environ.get("CROXEN_APPROVE_SECRET", "croxen-labs-approve-2026")
-DEV_DEPLOY_URL = "https://dev-croxen-labs.vercel.app/api/deploy-dev"
+DEV_DEPLOY_URL = "https://dev-croxen-labs.vercel.app/api/deploy-dev/"
 EMAIL_TO = os.environ.get("CROXEN_AUTHOR_EMAIL", "amr.roden@gmail.com")
 
 INTEREST_SIGNALS = [
@@ -108,9 +108,14 @@ def push_and_deploy():
             headers={"Content-Type": "application/json", "X-Approve-Secret": SECRET},
             method="POST",
         )
+        # follow redirects (Vercel may 308 to a trailing-slash URL)
         with urllib.request.urlopen(req, timeout=30) as resp:
             data = json.loads(resp.read().decode())
             return True, data.get("message", "dev rebuilt")
+    except urllib.error.HTTPError as e:
+        # read error body if present
+        body = e.read().decode(errors="ignore") if e.fp else ""
+        return True, f"pushed (dev rebuild returned {e.code}: {body[:120]})"
     except Exception as e:
         # Push succeeded; dev rebuild is best-effort
         return True, f"pushed (dev rebuild trigger failed: {e})"
