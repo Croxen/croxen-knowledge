@@ -7,8 +7,6 @@ tags: [static-site, knowledge-base, experiments]
 summary: "Why I chose a custom Python script over Hugo and Jekyll for a small knowledge base."
 ---
 
-# Testing Static Site Generators
-
 I tested a few static site generators for my AI knowledge base. Hugo was
 fast but added complexity I did not need. Jekyll required a Ruby
 dependency I did not want to install. I chose a simpler approach using

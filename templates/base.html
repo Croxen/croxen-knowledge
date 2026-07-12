@@ -3,22 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Croxen Knowledge{% endblock %}</title>
-  <meta name="description" content="{% block description %}A public knowledge base about AI, IT, automation, and personal technology.{% endblock %}">
+  <title>{% block title %}Croxen Labs{% endblock %}</title>
+  <meta name="description" content="{% block description %}Experiments, research, and practical findings in AI, IT, automation, and personal technology.{% endblock %}">
   <link rel="stylesheet" href="{{ prefix }}/static/style.css">
-  <link rel="alternate" type="application/rss+xml" title="Croxen Knowledge" href="{{ prefix }}/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Croxen Labs" href="{{ prefix }}/feed.xml">
 </head>
 <body>
   <header>
     <nav>
-      <a href="{{ prefix }}/" class="brand">Croxen Knowledge</a>
+      <a href="{{ prefix }}/" class="brand">
+        <span class="brand-mark">◆</span>
+        <span class="brand-text">Croxen Labs</span>
+      </a>
       <ul>
         <li><a href="{{ prefix }}/learning/">Learning</a></li>
         <li><a href="{{ prefix }}/experiments/">Experiments</a></li>
         <li><a href="{{ prefix }}/guides/">Guides</a></li>
         <li><a href="{{ prefix }}/now/">Now</a></li>
         <li><a href="{{ prefix }}/about/">About</a></li>
-        <li><a href="{{ prefix }}/changelog/">Changelog</a></li>
       </ul>
     </nav>
   </header>
@@ -26,8 +28,12 @@
     {% block content %}{% endblock %}
   </main>
   <footer>
-    <p>&copy; 2026 Croxen. Content under <a href="https://github.com/Croxen/croxen-knowledge/blob/main/LICENSE">MIT License</a>.</p>
-    <p><a href="{{ prefix }}/feed.xml">RSS</a> &middot; <a href="{{ prefix }}/sitemap.xml">Sitemap</a></p>
+    <div class="footer-inner">
+      <p class="footer-brand">◆ Croxen Labs</p>
+      <p>Experiments and findings in AI, IT, and automation.</p>
+      <p><a href="{{ prefix }}/feed.xml">RSS</a> &middot; <a href="{{ prefix }}/sitemap.xml">Sitemap</a> &middot; <a href="https://github.com/Croxen/croxen-knowledge">Source</a></p>
+      <p class="footer-copy">&copy; 2026 Croxen · MIT License</p>
+    </div>
   </footer>
 </body>
 </html>

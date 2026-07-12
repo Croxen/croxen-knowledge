@@ -1,29 +1,43 @@
 {% extends "base.html" %}
-{% block title %}Croxen Knowledge — AI, IT, automation, and personal technology{% endblock %}
+{% block title %}Croxen Labs — Experiments in AI, IT, and Automation{% endblock %}
 {% block content %}
 <section class="hero">
-  <h1>Croxen Knowledge</h1>
-  <p>A public knowledge base about AI, IT, automation, and personal technology.
-  Practical experiments, lessons learned, and guides — written in plain language,
-  honest about failures, no hype.</p>
+  <h1>Building, testing,<br><span class="hero-accent">and learning out loud.</span></h1>
+  <p class="hero-sub">Practical experiments, hard-won lessons, and honest guides from the intersection of AI, IT, and automation. No hype, no fluff — just what works and what doesn't.</p>
+  <div class="hero-links">
+    <a href="{{ prefix }}/experiments/" class="btn">Read experiments →</a>
+    <a href="{{ prefix }}/about/" class="btn btn-ghost">What is this?</a>
+  </div>
 </section>
 
+{% if articles %}
 <section class="recent">
-  <h2>Recent</h2>
-  {% if articles %}
-  <ul class="article-list">
+  <div class="section-header">
+    <h2>Recent</h2>
+    <span class="section-line"></span>
+  </div>
+  <div class="article-grid">
     {% for a in articles %}
-    <li>
+    <a href="{{ a.url }}" class="article-card">
       <time datetime="{{ a.date }}">{{ a.date }}</time>
-      <a href="{{ a.url }}">{{ a.title }}</a>
-      {% if a.tags %}
-      <span class="tags">{{ a.tags | join(', ') }}</span>
+      <h3>{{ a.title }}</h3>
+      {% if a.summary %}
+      <p>{{ a.summary }}</p>
       {% endif %}
-    </li>
+      {% if a.tags %}
+      <div class="card-tags">{{ a.tags | join(' · ') }}</div>
+      {% endif %}
+    </a>
     {% endfor %}
-  </ul>
-  {% else %}
-  <p>No articles published yet. Check back soon.</p>
-  {% endif %}
+  </div>
 </section>
+{% else %}
+<section class="recent">
+  <div class="section-header">
+    <h2>Recent</h2>
+    <span class="section-line"></span>
+  </div>
+  <p class="empty-state">First experiments coming soon.</p>
+</section>
+{% endif %}
 {% endblock %}

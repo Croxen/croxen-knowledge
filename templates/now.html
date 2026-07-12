@@ -1,11 +1,15 @@
 {% extends "base.html" %}
-{% block title %}Now — Croxen Knowledge{% endblock %}
+{% block title %}Now — Croxen Labs{% endblock %}
 {% block content %}
-<h1>Now</h1>
-<p>What I'm currently working on and learning about.</p>
+<section class="page-header">
+  <h1>Now</h1>
+  <p class="page-sub">What's currently being worked on.</p>
+</section>
+<div class="prose">
 {% if now_content %}
-{{ now_content }}
+{{ now_content | safe }}
 {% else %}
 <p>Updated content coming soon.</p>
 {% endif %}
+</div>
 {% endblock %}

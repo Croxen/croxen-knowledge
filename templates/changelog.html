@@ -1,8 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Changelog — Croxen Knowledge{% endblock %}
+{% block title %}Changelog — Croxen Labs{% endblock %}
 {% block content %}
-<h1>Changelog</h1>
-<p>Site and content changes, newest first.</p>
+<section class="page-header">
+  <h1>Changelog</h1>
+  <p class="page-sub">Site and content changes, newest first.</p>
+</section>
 {% if entries %}
 <ul class="changelog">
   {% for e in entries %}
@@ -14,6 +16,6 @@
   {% endfor %}
 </ul>
 {% else %}
-<p>No changes logged yet.</p>
+<p class="empty-state">No changes logged yet.</p>
 {% endif %}
 {% endblock %}

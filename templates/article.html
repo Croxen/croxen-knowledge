@@ -1,13 +1,20 @@
 {% extends "base.html" %}
-{% block title %}{{ article.title }} — Croxen Knowledge{% endblock %}
+{% block title %}{{ article.title }} — Croxen Labs{% endblock %}
 {% block content %}
-<article>
-  <h1>{{ article.title }}</h1>
-  <time datetime="{{ article.date }}">{{ article.date }}</time>
-  {% if article.tags %}
-  <p class="tags">{{ article.tags | join(', ') }}</p>
-  {% endif %}
-  {{ article.html }}
+<article class="article">
+  <header class="article-header">
+    <h1>{{ article.title }}</h1>
+    <div class="article-meta">
+      <time datetime="{{ article.date }}">{{ article.date }}</time>
+      {% if article.tags %}
+      <span class="dot">·</span>
+      <span class="tags">{{ article.tags | join(' · ') }}</span>
+      {% endif %}
+    </div>
+  </header>
+  <div class="prose">
+    {{ article.html | safe }}
+  </div>
 </article>
 <nav class="article-nav">
   <a href="{{ prefix }}/{{ section }}/">← Back to {{ section_title }}</a>
