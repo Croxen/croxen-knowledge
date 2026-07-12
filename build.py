@@ -39,6 +39,7 @@ TEMPLATES_DIR = REPO_ROOT / "templates"
 STATIC_DIR = REPO_ROOT / "static"
 BUILD_DIR = REPO_ROOT / "_build"
 SITE_URL = "https://croxen.github.io/croxen-knowledge"
+SITE_PATH = "/croxen-knowledge"  # subpath for GitHub Pages
 
 # Sections that contain articles (each gets an index + individual pages)
 SECTIONS = {
@@ -114,7 +115,7 @@ def load_articles() -> dict[str, list[dict]]:
                 "tags": meta.get("tags", []) if isinstance(meta.get("tags"), list) else [meta.get("tags", "")],
                 "summary": meta.get("summary", ""),
                 "html": html_body,
-                "url": f"/{section}/{slug}/",
+                "url": f"{SITE_PATH}/{section}/{slug}/",
                 "slug": slug,
                 "section": section,
             }
@@ -139,12 +140,12 @@ def render_templates(articles: dict[str, list[dict]], env: Environment) -> list[
     # Home page
     template = env.get_template("home.html")
     html_out = template.render(articles=all_articles[:10])
-    generated.append({"path": "index.html", "content": html_out, "url": "/"})
+    generated.append({"path": "index.html", "content": html_out, "url": f"{SITE_PATH}/"})
 
     # About page
     template = env.get_template("about.html")
     html_out = template.render()
-    generated.append({"path": "about/index.html", "content": html_out, "url": "/about/"})
+    generated.append({"path": "about/index.html", "content": html_out, "url": f"{SITE_PATH}/about/"})
 
     # Now page
     now_file = CONTENT_DIR / "now.md"
@@ -154,7 +155,7 @@ def render_templates(articles: dict[str, list[dict]], env: Environment) -> list[
         now_content = markdown.markdown(body, extensions=["extra"])
     template = env.get_template("now.html")
     html_out = template.render(now_content=now_content)
-    generated.append({"path": "now/index.html", "content": html_out, "url": "/now/"})
+    generated.append({"path": "now/index.html", "content": html_out, "url": f"{SITE_PATH}/now/"})
 
     # Section index pages + individual article pages
     section_template = env.get_template("section.html")
@@ -163,7 +164,7 @@ def render_templates(articles: dict[str, list[dict]], env: Environment) -> list[
     for section, title in SECTIONS.items():
         section_arts = articles.get(section, [])
         html_out = section_template.render(articles=section_arts, section_title=title)
-        generated.append({"path": f"{section}/index.html", "content": html_out, "url": f"/{section}/"})
+        generated.append({"path": f"{section}/index.html", "content": html_out, "url": f"{SITE_PATH}/{section}/"})
 
         for art in section_arts:
             html_out = article_template.render(
@@ -174,7 +175,7 @@ def render_templates(articles: dict[str, list[dict]], env: Environment) -> list[
             generated.append({
                 "path": f"{section}/{art['slug']}/index.html",
                 "content": html_out,
-                "url": f"/{section}/{art['slug']}/",
+                "url": f"{SITE_PATH}/{section}/{art['slug']}/",
                 "date": art["date"],
             })
 
@@ -182,15 +183,15 @@ def render_templates(articles: dict[str, list[dict]], env: Environment) -> list[
     changelog = load_changelog()
     template = env.get_template("changelog.html")
     html_out = template.render(entries=changelog)
-    generated.append({"path": "changelog/index.html", "content": html_out, "url": "/changelog/"})
+    generated.append({"path": "changelog/index.html", "content": html_out, "url": f"{SITE_PATH}/changelog/"})
 
     # RSS feed
     rss = generate_rss(all_articles[:15])
-    generated.append({"path": "feed.xml", "content": rss, "url": "/feed.xml"})
+    generated.append({"path": "feed.xml", "content": rss, "url": f"{SITE_PATH}/feed.xml"})
 
     # Sitemap
     sitemap = generate_sitemap(generated)
-    generated.append({"path": "sitemap.xml", "content": sitemap, "url": "/sitemap.xml"})
+    generated.append({"path": "sitemap.xml", "content": sitemap, "url": f"{SITE_PATH}/sitemap.xml"})
 
     return generated
 
@@ -291,6 +292,7 @@ def main():
         loader=FileSystemLoader(str(TEMPLATES_DIR)),
         autoescape=select_autoescape(["html", "xml"]),
     )
+    env.globals["prefix"] = SITE_PATH
 
     articles = load_articles()
     generated = render_templates(articles, env)
