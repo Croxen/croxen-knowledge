@@ -37,7 +37,6 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         name: VERCEL_PROJECT,
-        target: "preview",
         gitSource: { type: "github", repo: GH_REPO, repoId: GH_REPO_ID, ref: "main" },
         build: { env: { DEV_MODE: "1" } },
       }),
