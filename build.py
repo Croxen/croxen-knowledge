@@ -275,6 +275,7 @@ def write_build(generated: list[dict]) -> None:
         shutil.copytree(STATIC_DIR, BUILD_DIR / "static")
 
     # Copy API functions into the build output so Vercel deploys them
+    # as serverless functions alongside the static content
     api_dir = REPO_ROOT / "api"
     if api_dir.exists():
         shutil.copytree(api_dir, BUILD_DIR / "api")
