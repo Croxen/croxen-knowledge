@@ -1,8 +1,8 @@
 ---
 title: "Running a Local AI Agent on a Home Server"
 date: 2026-07-12
-status: draft
-visibility: draft
+status: approved
+visibility: approved
 tags: [ai, homelab, automation, hermes]
 summary: "What I've learned from running a local AI agent on a Proxmox LXC container for the past month — practical benefits, costs, and pitfalls."
 ---
