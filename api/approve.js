@@ -94,7 +94,7 @@ async function triggerDevRedeploy() {
       body: JSON.stringify({
         name: VERCEL_PROJECT,
         target: "preview",
-        gitSource: { repo: GH_REPO, ref: "main" },
+        gitSource: { type: "github", repo: GH_REPO, ref: "main" },
         build: { env: { DEV_MODE: "1" } },
       }),
     });

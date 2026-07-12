@@ -35,7 +35,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         name: VERCEL_PROJECT,
         target: "production",
-        gitSource: { repo: GH_REPO, ref: "main" },
+        gitSource: { type: "github", repo: GH_REPO, ref: "main" },
       }),
     });
     if (!resp.ok) {
