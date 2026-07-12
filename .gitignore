@@ -1,0 +1,21 @@
+# Secrets — never commit
+.env
+.env.*
+*.env
+*.key
+*.pem
+id_ed25519
+id_rsa
+*credentials*
+*secrets*
+
+# Build output
+_build/
+__pycache__/
+*.pyc
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
