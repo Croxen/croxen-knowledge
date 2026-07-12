@@ -112,6 +112,7 @@ def load_articles() -> dict[str, list[dict]]:
                 meta["is_draft"] = True
             else:
                 meta["is_draft"] = False
+                meta["is_approved"] = True
 
             html_body = markdown.markdown(body, extensions=["extra", "codehilite"])
             slug = md_file.stem
@@ -125,6 +126,7 @@ def load_articles() -> dict[str, list[dict]]:
                 "slug": slug,
                 "section": section,
                 "is_draft": meta.get("is_draft", False),
+                "is_approved": meta.get("is_approved", False),
             }
             articles[section].append(article)
 
@@ -178,6 +180,7 @@ def render_templates(articles: dict[str, list[dict]], env: Environment) -> list[
                 article=art,
                 section=section,
                 section_title=title,
+                dev_mode=DEV_MODE,
             )
             generated.append({
                 "path": f"{section}/{art['slug']}/index.html",

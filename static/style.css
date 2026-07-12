@@ -436,6 +436,21 @@ ul.changelog time {
   border-radius: 6px;
 }
 
+.live-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff !important;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: 6px;
+}
+
+.live-banner {
+  border-left: 3px solid #10b981;
+}
+
 .draft-text {
   font-size: 0.875rem;
   color: var(--fg-muted);

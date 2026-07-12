@@ -19,6 +19,19 @@
         </button>
       </div>
     </div>
+    {% elif dev_mode and article.is_approved %}
+    <div class="draft-banner live-banner">
+      <span class="live-badge">LIVE</span>
+      <span class="draft-text">This article is published. You can still edit it on dev.</span>
+      <div class="draft-actions">
+        <button class="edit-btn" id="edit-btn" data-slug="{{ article.slug }}" data-section="{{ article.section }}">
+          ✎ Edit
+        </button>
+        <button class="delete-btn" id="delete-btn" data-slug="{{ article.slug }}" data-section="{{ article.section }}">
+          🗑 Delete
+        </button>
+      </div>
+    </div>
     {% endif %}
     <h1>{{ article.title }}</h1>
     <div class="article-meta">
@@ -48,7 +61,7 @@
   <a href="{{ prefix }}/{{ section }}/">← Back to {{ section_title }}</a>
 </nav>
 
-{% if article.is_draft %}
+{% if article.is_draft or (dev_mode and article.is_approved) %}
 <script>
 const SECRET = 'croxen-labs-approve-2026';
 const slug = '{{ article.slug }}';
