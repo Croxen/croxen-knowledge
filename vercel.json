@@ -1,5 +1,10 @@
 {
   "outputDirectory": "_build",
   "cleanUrls": true,
-  "trailingSlash": true
+  "trailingSlash": true,
+  "functions": {
+    "api/approve.py": {
+      "runtime": "@vercel/python"
+    }
+  }
 }
