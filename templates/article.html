@@ -7,9 +7,17 @@
     <div class="draft-banner">
       <span class="draft-badge">DRAFT</span>
       <span class="draft-text">This is a preview. Not yet published.</span>
-      <button class="approve-btn" data-slug="{{ article.slug }}" data-section="{{ article.section }}">
-        Approve for production →
-      </button>
+      <div class="draft-actions">
+        <button class="edit-btn" id="edit-btn" data-slug="{{ article.slug }}" data-section="{{ article.section }}">
+          ✎ Edit
+        </button>
+        <button class="delete-btn" id="delete-btn" data-slug="{{ article.slug }}" data-section="{{ article.section }}">
+          🗑 Delete
+        </button>
+        <button class="approve-btn" id="approve-btn" data-slug="{{ article.slug }}" data-section="{{ article.section }}">
+          Approve for production →
+        </button>
+      </div>
     </div>
     {% endif %}
     <h1>{{ article.title }}</h1>
@@ -21,9 +29,20 @@
       {% endif %}
     </div>
   </header>
-  <div class="prose">
+  <div class="prose" id="article-prose">
     {{ article.html | safe }}
   </div>
+
+  {% if article.is_draft %}
+  <div class="edit-panel" id="edit-panel" style="display:none;">
+    <textarea class="edit-textarea" id="edit-textarea" placeholder="Loading..."></textarea>
+    <div class="edit-actions">
+      <button class="btn btn-ghost" id="edit-cancel">Cancel</button>
+      <button class="btn" id="edit-save">Save changes</button>
+    </div>
+    <p class="edit-status" id="edit-status"></p>
+  </div>
+  {% endif %}
 </article>
 <nav class="article-nav">
   <a href="{{ prefix }}/{{ section }}/">← Back to {{ section_title }}</a>
@@ -31,37 +50,143 @@
 
 {% if article.is_draft %}
 <script>
-document.querySelector('.approve-btn')?.addEventListener('click', async function(e) {
-  const btn = e.target;
-  const slug = btn.dataset.slug;
-  const section = btn.dataset.section;
+const SECRET = 'croxen-labs-approve-2026';
+const slug = '{{ article.slug }}';
+const section = '{{ article.section }}';
+
+// --- Approve ---
+document.getElementById('approve-btn')?.addEventListener('click', async function(e) {
+  const btn = e.currentTarget;
   btn.disabled = true;
   btn.textContent = 'Approving...';
-
   try {
-    const resp = await fetch('/api/approve', {
+    const resp = await fetch('/api/approve/', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Approve-Secret': 'croxen-labs-approve-2026',
-      },
-      body: JSON.stringify({ slug, section })
+      headers: { 'Content-Type': 'application/json', 'X-Approve-Secret': SECRET },
+      body: JSON.stringify({ action: 'approve', slug, section })
     });
     const data = await resp.json();
-
     if (resp.ok) {
       btn.textContent = '✓ Approved! Production deploy triggered';
       btn.classList.add('approved');
-      btn.disabled = true;
-
-      // Show a message about what happens next
+      // Safe: hardcoded string, no user input
       const msg = document.createElement('p');
       msg.className = 'approve-success-msg';
-      // Safe: msg is a hardcoded string, no user input interpolated
-      msg.innerHTML = 'This article is now approved. The production site will update in about 30 seconds. Refresh to see it live on <a href="https://croxen-knowledge-public.vercel.app/{{ section }}/{{ slug }}/">the production site</a>.';
-      btn.parentElement.appendChild(msg);
+      msg.textContent = 'Article approved. Production site will update in ~30 seconds.';
+      btn.parentElement.parentElement.appendChild(msg);
     } else {
       throw new Error(data.error || 'Approval failed');
+    }
+  } catch (err) {
+    btn.textContent = '✗ ' + err.message;
+    btn.classList.add('error');
+    btn.disabled = false;
+  }
+});
+
+// --- Edit ---
+const editBtn = document.getElementById('edit-btn');
+const editPanel = document.getElementById('edit-panel');
+const editTextarea = document.getElementById('edit-textarea');
+const editStatus = document.getElementById('edit-status');
+const editSave = document.getElementById('edit-save');
+const editCancel = document.getElementById('edit-cancel');
+const articleProse = document.getElementById('article-prose');
+
+let originalContent = '';
+
+editBtn?.addEventListener('click', async function() {
+  editPanel.style.display = 'block';
+  editTextarea.value = 'Loading...';
+  editTextarea.disabled = true;
+  editBtn.textContent = '✎ Loading...';
+
+  try {
+    const resp = await fetch(`/api/content/?slug=${slug}&section=${section}`, {
+      headers: { 'X-Approve-Secret': SECRET }
+    });
+    const data = await resp.json();
+    if (resp.ok) {
+      editTextarea.value = data.content;
+      originalContent = data.content;
+      editTextarea.disabled = false;
+      editBtn.textContent = '✎ Edit';
+      editTextarea.focus();
+    } else {
+      throw new Error(data.error || 'Failed to load');
+    }
+  } catch (err) {
+    editTextarea.value = 'Error: ' + err.message;
+    editBtn.textContent = '✎ Edit';
+  }
+});
+
+editCancel?.addEventListener('click', function() {
+  editPanel.style.display = 'none';
+  editTextarea.value = '';
+});
+
+editSave?.addEventListener('click', async function() {
+  const newContent = editTextarea.value;
+  if (newContent === originalContent) {
+    editStatus.textContent = 'No changes to save.';
+    return;
+  }
+  if (!newContent.trim()) {
+    editStatus.textContent = 'Content cannot be empty.';
+    return;
+  }
+
+  editSave.disabled = true;
+  editSave.textContent = 'Saving...';
+  editStatus.textContent = '';
+
+  try {
+    const resp = await fetch('/api/approve/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Approve-Secret': SECRET },
+      body: JSON.stringify({ action: 'edit', slug, section, content: newContent })
+    });
+    const data = await resp.json();
+    if (resp.ok) {
+      editSave.textContent = '✓ Saved';
+      editSave.classList.add('approved');
+      editStatus.textContent = 'Saved. The dev preview will update in ~30 seconds. Refresh to see changes.';
+      originalContent = newContent;
+    } else {
+      throw new Error(data.error || 'Save failed');
+    }
+  } catch (err) {
+    editStatus.textContent = '✗ ' + err.message;
+    editSave.disabled = false;
+    editSave.textContent = 'Save changes';
+  }
+});
+
+// --- Delete ---
+document.getElementById('delete-btn')?.addEventListener('click', async function(e) {
+  const btn = e.currentTarget;
+  if (!confirm('Delete this draft article? This removes it from the repo. This cannot be undone.')) return;
+  btn.disabled = true;
+  btn.textContent = 'Deleting...';
+  try {
+    const resp = await fetch('/api/approve/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Approve-Secret': SECRET },
+      body: JSON.stringify({ action: 'delete', slug, section })
+    });
+    const data = await resp.json();
+    if (resp.ok) {
+      btn.textContent = '✓ Deleted';
+      btn.classList.add('approved');
+      // Safe: hardcoded string
+      const msg = document.createElement('p');
+      msg.className = 'approve-success-msg';
+      msg.textContent = 'Article deleted. Redirecting...';
+      btn.parentElement.parentElement.appendChild(msg);
+      setTimeout(() => { window.location.href = '/' + section + '/'; }, 2000);
+    } else {
+      throw new Error(data.error || 'Delete failed');
     }
   } catch (err) {
     btn.textContent = '✗ ' + err.message;
