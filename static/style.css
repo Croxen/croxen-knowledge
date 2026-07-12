@@ -1,0 +1,118 @@
+/* Croxen Knowledge — minimal readable stylesheet */
+:root {
+  --fg: #1a1a1a;
+  --bg: #fafafa;
+  --accent: #0066cc;
+  --muted: #666;
+  --border: #ddd;
+  --max-width: 42rem;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--fg);
+  background: var(--bg);
+  margin: 0;
+}
+
+header {
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 1.5rem;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+nav .brand {
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--fg);
+  font-size: 1.1rem;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.2rem;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--accent);
+}
+
+nav a:hover { text-decoration: underline; }
+
+main {
+  max-width: var(--max-width);
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+h2 { font-size: 1.3rem; margin-top: 2rem; }
+
+a { color: var(--accent); }
+
+article time {
+  display: block;
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.tags { color: var(--muted); font-size: 0.85rem; }
+
+ul.article-list {
+  list-style: none;
+  padding: 0;
+}
+
+ul.article-list li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+ul.article-list time {
+  display: inline-block;
+  width: 5.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.summary { color: var(--muted); font-size: 0.9rem; margin: 0.25rem 0 0 5.5rem; }
+
+ul.changelog { list-style: none; padding: 0; }
+ul.changelog li { padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+ul.changelog time { display: inline-block; width: 5.5rem; color: var(--muted); font-size: 0.85rem; }
+
+article img { max-width: 100%; height: auto; }
+pre { background: #f0f0f0; padding: 1rem; overflow-x: auto; border-radius: 4px; }
+code { font-family: "SF Mono", Monaco, Consolas, monospace; font-size: 0.9em; }
+p code { background: #f0f0f0; padding: 0.1rem 0.3rem; border-radius: 3px; }
+
+.article-nav { margin-top: 2rem; }
+
+footer {
+  border-top: 1px solid var(--border);
+  padding: 1rem 1.5rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+footer a { color: var(--accent); }
+
+.hero h1 { font-size: 2.2rem; }
+.hero p { font-size: 1.1rem; color: var(--muted); }

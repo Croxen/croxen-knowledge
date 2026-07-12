@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title }} — Croxen Knowledge{% endblock %}
+{% block content %}
+<article>
+  <h1>{{ article.title }}</h1>
+  <time datetime="{{ article.date }}">{{ article.date }}</time>
+  {% if article.tags %}
+  <p class="tags">{{ article.tags | join(', ') }}</p>
+  {% endif %}
+  {{ article.html }}
+</article>
+<nav class="article-nav">
+  <a href="/{{ section }}/">← Back to {{ section_title }}</a>
+</nav>
+{% endblock %}

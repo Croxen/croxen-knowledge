@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}{{ section_title }} — Croxen Knowledge{% endblock %}
+{% block content %}
+<h1>{{ section_title }}</h1>
+{% if articles %}
+<ul class="article-list">
+  {% for a in articles %}
+  <li>
+    <time datetime="{{ a.date }}">{{ a.date }}</time>
+    <a href="{{ a.url }}">{{ a.title }}</a>
+    {% if a.summary %}
+    <p class="summary">{{ a.summary }}</p>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>Nothing here yet. Check back soon.</p>
+{% endif %}
+{% endblock %}

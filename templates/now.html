@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Now — Croxen Knowledge{% endblock %}
+{% block content %}
+<h1>Now</h1>
+<p>What I'm currently working on and learning about.</p>
+{% if now_content %}
+{{ now_content }}
+{% else %}
+<p>Updated content coming soon.</p>
+{% endif %}
+{% endblock %}

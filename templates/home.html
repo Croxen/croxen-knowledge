@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Croxen Knowledge — AI, IT, automation, and personal technology{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Croxen Knowledge</h1>
+  <p>A public knowledge base about AI, IT, automation, and personal technology.
+  Practical experiments, lessons learned, and guides — written in plain language,
+  honest about failures, no hype.</p>
+</section>
+
+<section class="recent">
+  <h2>Recent</h2>
+  {% if articles %}
+  <ul class="article-list">
+    {% for a in articles %}
+    <li>
+      <time datetime="{{ a.date }}">{{ a.date }}</time>
+      <a href="{{ a.url }}">{{ a.title }}</a>
+      {% if a.tags %}
+      <span class="tags">{{ a.tags | join(', ') }}</span>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No articles published yet. Check back soon.</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Changelog — Croxen Knowledge{% endblock %}
+{% block content %}
+<h1>Changelog</h1>
+<p>Site and content changes, newest first.</p>
+{% if entries %}
+<ul class="changelog">
+  {% for e in entries %}
+  <li>
+    <time datetime="{{ e.date }}">{{ e.date }}</time>
+    <strong>{{ e.title }}</strong>
+    {{ e.description }}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No changes logged yet.</p>
+{% endif %}
+{% endblock %}
