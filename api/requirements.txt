@@ -1,0 +1,2 @@
+# Serverless function dependencies
+# (stdlib only — no external deps needed for approve.py)
