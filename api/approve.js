@@ -10,6 +10,7 @@
 
 const GH_TOKEN = process.env.GH_TOKEN;
 const GH_REPO = process.env.GH_REPO || "Croxen/croxen-knowledge";
+const GH_REPO_ID = process.env.VERCEL_REPO_ID || "1298092585";
 const APPROVE_SECRET = process.env.APPROVE_SECRET;
 const VERCEL_TOKEN = process.env.VERCEL_TOKEN;
 const VERCEL_PROJECT = process.env.VERCEL_PROJECT || "croxen-knowledge";
@@ -94,7 +95,7 @@ async function triggerDevRedeploy() {
       body: JSON.stringify({
         name: VERCEL_PROJECT,
         target: "preview",
-        gitSource: { type: "github", repo: GH_REPO, ref: "main" },
+        gitSource: { type: "github", repo: GH_REPO, repoId: GH_REPO_ID, ref: "main" },
         build: { env: { DEV_MODE: "1" } },
       }),
     });
