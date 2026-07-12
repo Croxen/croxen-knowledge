@@ -8,7 +8,7 @@ summary: "How I set up a dev-to-prod publishing pipeline with an approve button 
 ---
 
 This is a test of the approve workflow. When you press the green button
-above, this article's status gets flipped from `draft` to `approved` on
+above, this article's status gets flipped from `draft` `edit` to `approved` on
 GitHub, which triggers a production rebuild on Vercel.
 
 ## How it works
