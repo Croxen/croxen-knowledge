@@ -38,8 +38,8 @@ CONTENT_DIR = REPO_ROOT / "content"
 TEMPLATES_DIR = REPO_ROOT / "templates"
 STATIC_DIR = REPO_ROOT / "static"
 BUILD_DIR = REPO_ROOT / "_build"
-SITE_URL = "https://croxen.github.io/croxen-knowledge"
-SITE_PATH = "/croxen-knowledge"  # subpath for GitHub Pages
+SITE_URL = "https://croxen-knowledge.vercel.app"
+SITE_PATH = ""  # Vercel serves from root — no subpath needed
 
 # Sections that contain articles (each gets an index + individual pages)
 SECTIONS = {
