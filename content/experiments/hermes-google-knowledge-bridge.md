@@ -51,9 +51,8 @@ The first run processed 13 Gemini chats and 14 NotebookLM notebooks. Here's what
 
 - I'm actively researching how to use Hermes on my phone
 - I have a recurring daily habit of asking Gemini for AI news summaries
-- I track my health, mental state, and family conversations in structured NotebookLM notebooks
-- I'm part of a community theatre group in Wagga Wagga
-- My 12-year-old daughter Veronica has her own notebook for issues we're working through together
+- I track my health, ideas, thoughts, ramblings
+
 
 None of this was manually entered. Hermes extracted it by reading what I was already doing.
 
@@ -72,8 +71,6 @@ This isn't about surveillance — it's about **reducing the friction of context 
 ## The code
 
 The polling script, extraction skill, and ingestion policy are all part of Hermes' [agency loop](https://github.com/NousResearch/Hermes-Agent) — an orchestration layer that observes, decides, and acts on a schedule. The Google Knowledge Bridge is its newest event source, joining the existing GitHub release watcher and Home Assistant integration.
-
-If you run Hermes Agent and want to set this up yourself, the assessment and implementation guide is at `hermes-agency-design/assessment/07_google_knowledge_bridge.md` in your Hermes home directory.
 
 ---
 
