@@ -1,8 +1,8 @@
 ---
 title: "Giving Hermes a Memory: Connecting My AI Agent to Google Gemini and NotebookLM"
 date: 2026-07-15
-status: draft
-visibility: draft
+status: approved
+visibility: approved
 tags: [hermes, automation, google, gemini, notebooklm, ai-agents]
 summary: "How I built an automated pipeline that lets my local AI agent learn from my everyday Google Gemini conversations and NotebookLM research — without any manual exports or copy-paste."
 ---
