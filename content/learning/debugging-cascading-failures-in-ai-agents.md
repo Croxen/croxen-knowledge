@@ -1,8 +1,8 @@
 ---
 title: "Debugging Cascading Failures in AI Agents: One Bad Config Brought Everything Down"
 date: 2026-07-15
-status: draft
-visibility: draft
+status: approved
+visibility: approved
 tags: [ai, automation, hermes]
 summary: "How a single invalid model ID in an AI agent's config caused a cascade of failures across the entire system, and how to methodically trace the root cause."
 ---
