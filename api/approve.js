@@ -101,7 +101,12 @@ export default async function handler(req, res) {
   if (action === "delete") {
     const d = await ghDelete(fp, sha, `Delete: ${section}/${slug}`);
     if (!d.ok) return res.status(d.status).json({ error: `Delete failed: ${d.text}` });
-    return res.status(200).json({ message: "Deleted. Dev preview updates within 5 minutes.", slug, section });
+    // Also redeploy prod so the article disappears from the live site
+    const deployed = await triggerProdDeploy();
+    return res.status(200).json({
+      message: deployed ? "Deleted. Removed from public site in ~60 seconds." : "Deleted from GitHub. Tell Hermes to deploy prod to update the public site.",
+      slug, section,
+    });
   }
 
   return res.status(400).json({ error: `Unknown action: ${action}` });
