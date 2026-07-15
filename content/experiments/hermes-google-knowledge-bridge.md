@@ -51,7 +51,7 @@ The first run processed 13 Gemini chats and 14 NotebookLM notebooks. Here's what
 
 - I'm actively researching how to use Hermes on my phone
 - I have a recurring daily habit of asking Gemini for AI news summaries
-- I track my health, ideas, thoughts, ramblings
+- I track my health, ideas, thoughts, ramblings.
 
 
 None of this was manually entered. Hermes extracted it by reading what I was already doing.
