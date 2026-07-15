@@ -102,7 +102,24 @@ async function triggerDevRedeploy() {
       return { ok: false, status: resp.status, text: await resp.text() };
     }
     const data = await resp.json();
-    return { ok: true, url: data.url };
+    const previewUrl = data.url;  // e.g. croxen-knowledge-abc123-croxen.vercel.app
+
+    // Alias the new deployment to the stable dev URL so changes are visible
+    const DEV_ALIAS = process.env.DEV_ALIAS || "dev-croxen-labs";
+    const aliasResp = await fetch(
+      `https://api.vercel.com/v2/aliases/${previewUrl}/${DEV_ALIAS}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${VERCEL_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      }
+    );
+    // Alias failure is non-fatal — preview URL still works
+
+    return { ok: true, url: previewUrl, aliasStatus: aliasResp.ok ? "aliased" : "skipped" };
   } catch (err) {
     return { ok: false, text: err.message };
   }
