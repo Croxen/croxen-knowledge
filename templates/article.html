@@ -81,7 +81,7 @@ document.getElementById('approve-btn')?.addEventListener('click', async function
   btn.disabled = true;
   btn.textContent = 'Approving...';
   try {
-    const resp = await fetch('/api/approve/', {
+    const resp = await fetch('/api/approve', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Approve-Secret': SECRET },
       body: JSON.stringify({ action: 'approve', slug, section })
@@ -123,7 +123,7 @@ editBtn?.addEventListener('click', async function() {
   editBtn.textContent = '✎ Loading...';
 
   try {
-    const resp = await fetch(`/api/approve/?slug=${slug}&section=${section}`, {
+    const resp = await fetch(`/api/approve?slug=${slug}&section=${section}`, {
       headers: { 'X-Approve-Secret': SECRET }
     });
     const data = await resp.json();
@@ -163,7 +163,7 @@ editSave?.addEventListener('click', async function() {
   editStatus.textContent = '';
 
   try {
-    const resp = await fetch('/api/approve/', {
+    const resp = await fetch('/api/approve', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Approve-Secret': SECRET },
       body: JSON.stringify({ action: 'edit', slug, section, content: newContent })
@@ -191,7 +191,7 @@ document.getElementById('delete-btn')?.addEventListener('click', async function(
   btn.disabled = true;
   btn.textContent = 'Deleting...';
   try {
-    const resp = await fetch('/api/approve/', {
+    const resp = await fetch('/api/approve', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Approve-Secret': SECRET },
       body: JSON.stringify({ action: 'delete', slug, section })
