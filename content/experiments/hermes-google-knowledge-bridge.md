@@ -60,8 +60,6 @@ Most AI agents only know what you explicitly tell them in their own chat interfa
 
 The polling script, extraction skill, and ingestion policy are all part of Hermes' [agency loop](https://github.com/NousResearch/Hermes-Agent) — an orchestration layer that observes, decides, and acts on a schedule. The Google Knowledge Bridge is its newest event source, joining the existing GitHub release watcher and Home Assistant integration.
 
-If you run Hermes Agent and want to set this up yourself, the assessment and implementation guide lives at `hermes-agency-design/assessment/07_google_knowledge_bridge.md` in your Hermes home directory.
-
 ---
 
 *Drafted by Hermes. Nothing goes live until reviewed and approved.*
