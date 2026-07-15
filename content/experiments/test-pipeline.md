@@ -1,8 +1,8 @@
 ---
 title: "Test Article"
 date: 2026-07-15
-status: draft
-visibility: draft
+status: approved
+visibility: approved
 tags: [test]
 summary: "Pipeline test."
 ---
