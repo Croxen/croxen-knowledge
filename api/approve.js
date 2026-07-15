@@ -84,42 +84,22 @@ async function deleteFile(apiUrl, sha, message) {
 }
 
 async function triggerDevRedeploy() {
-  if (!VERCEL_TOKEN) return { ok: false, skipped: true };
+  // Call the deploy-dev endpoint which handles both deploy + alias correctly
+  const devDeployUrl = `https://${process.env.VERCEL_URL || "dev-croxen-labs.vercel.app"}/api/deploy-dev`;
   try {
-    const resp = await fetch(`https://api.vercel.com/v13/deployments`, {
+    const resp = await fetch(devDeployUrl, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${VERCEL_TOKEN}`,
         "Content-Type": "application/json",
+        "X-Approve-Secret": APPROVE_SECRET || "",
       },
-      body: JSON.stringify({
-        name: VERCEL_PROJECT,
-        gitSource: { type: "github", repo: GH_REPO, repoId: GH_REPO_ID, ref: "main" },
-        build: { env: { DEV_MODE: "1" } },
-      }),
     });
     if (!resp.ok) {
-      return { ok: false, status: resp.status, text: await resp.text() };
+      const text = await resp.text();
+      return { ok: false, status: resp.status, text };
     }
     const data = await resp.json();
-    const previewUrl = data.url;  // e.g. croxen-knowledge-abc123-croxen.vercel.app
-
-    // Alias the new deployment to the stable dev URL so changes are visible
-    const DEV_ALIAS = process.env.DEV_ALIAS || "dev-croxen-labs";
-    const aliasResp = await fetch(
-      `https://api.vercel.com/v2/aliases/${previewUrl}/${DEV_ALIAS}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${VERCEL_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({}),
-      }
-    );
-    // Alias failure is non-fatal — preview URL still works
-
-    return { ok: true, url: previewUrl, aliasStatus: aliasResp.ok ? "aliased" : "skipped" };
+    return { ok: true, url: data.preview, message: data.message };
   } catch (err) {
     return { ok: false, text: err.message };
   }
@@ -215,13 +195,10 @@ export default async function handler(req, res) {
     }
     const commit = await commitFile(apiUrl, content, sha, `Edit: ${section}/${slug}`);
     if (!commit.ok) return res.status(commit.status).json({ error: `Commit failed: ${commit.text}` });
-    // Trigger a dev preview redeploy so the changes show up
-    const redeploy = await triggerDevRedeploy();
     return res.status(200).json({
-      message: "Article saved. Dev preview rebuilding — refresh in ~30 seconds.",
+      message: "Article saved. Dev preview updates within 15 minutes (auto-deploy cron).",
       slug, section,
       commit: commit.data.commit?.sha || "",
-      redeploy: redeploy.ok ? "triggered" : "skipped",
     });
   }
 
